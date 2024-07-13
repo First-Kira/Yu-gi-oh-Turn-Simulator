@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yu-Gi-Oh! Card Pie Chart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        canvas {
+            max-width: 400px;
+            max-height: 400px;
+            margin-right: 20px;
+        }
+
+        .legend-container {
+            max-width: 300px;
+        }
+
+        .legend-container ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .legend-container li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .legend-container span {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <canvas id="cardPieChart"></canvas>
+        <div class="legend-container">
+            <h2>Cards</h2>
+            <ul id="legend"></ul>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const cardData = [
+            {name: "Destiny HERO - Plasma", count: 3},
+            {name: "Destiny HERO - Dogma", count: 3},
+            {name: "Dark Drill", count: 3},
+            {name: "Destiny HERO - Drawhand", count: 3},
+            {name: "Break the Destiny", count: 2},
+            {name: "D - Tactics", count: 2},
+            {name: "Polymerization", count: 3},
+            {name: "Destiny HERO - Dasher", count: 3},
+            {name: "Destiny HERO - Diamond Dude", count: 3},
+            {name: "Destiny Fusion", count: 2},
+            {name: "Future Fusion", count: 2},
+            {name: "Necro Fusion", count: 2},
+            {name: "Raigeki", count: 2},
+            {name: "Lightning Storm", count: 1},
+            {name: "Monster Reborn", count: 1},
+            {name: "Destiny HERO - Disk Commander", count: 1},
+            {name: "Destiny Draw", count: 3},
+            {name: "Destiny HERO - Malicious", count: 2},
+            {name: "Destiny HERO - Dreamer", count: 2},
+            {name: "Destiny HERO - Dark Angel", count: 2}
+        ];
+
+        const ctx = document.getElementById('cardPieChart').getContext('2d');
+
+        const cardNames = cardData.map(card => card.name);
+        const cardCounts = cardData.map(card => card.count);
+
+        const colors = [
+            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40',
+            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40',
+            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40',
+            '#FF6384', '#36A2EB'
+        ];
+
+        const pieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: cardNames,
+                datasets: [{
+                    data: cardCounts,
+                    backgroundColor: colors,
+                    hoverBackgroundColor: colors
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return `${cardNames[tooltipItem.dataIndex]}: ${cardCounts[tooltipItem.dataIndex]}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        const legendContainer = document.getElementById('legend');
+        cardNames.forEach((name, index) => {
+            const li = document.createElement('li');
+            const colorBox = document.createElement('span');
+            colorBox.style.backgroundColor = colors[index];
+            li.appendChild(colorBox);
+            li.appendChild(document.createTextNode(name));
+            legendContainer.appendChild(li);
+        });
+    </script>
+</body>
+</html>
